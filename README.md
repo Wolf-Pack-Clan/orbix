@@ -20,4 +20,5 @@ sudo apt update
 sudo apt install orbix
 ```
 </br>
-Arch Linux based distros are also supported but currently there are no packages. You can download binary files from the [releases](https://github.com/Wolf-Pack-Clan/orbix/releases).
+
+Arch Linux based distros are also supported but currently there are no packages. You can download binary files from the [release page](https://github.com/Wolf-Pack-Clan/orbix/releases).

@@ -3,7 +3,7 @@
 # Orbix
 This is utility that automates the creation of Call of Duty ®️ (2003) servers ( currently v1.1 only).
 It downloads and creates symlinks and copies of required files.
-It also compiles and installs [iw1x-server](https://github.com/coyoteclan/iw1x-server) extensions.
+It also compiles and installs this fork of **iw1x-server**: https://github.com/coyoteclan/iw1x-server 
 
 ## Screenshots
 

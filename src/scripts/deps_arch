@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Distro ID_LIKE: Arch Linux\n"
+
+sudo pacman -S --needed lib32-glibc lib32-zlib gcc-multilib cmake lib32-sqlite lib32-curl lib32-openssl git

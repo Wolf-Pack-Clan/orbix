@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd ~/.local/share/orbix
+
+git clone https://github.com/coyoteclan/iw1x-server.git
+
+cd iw1x-server/build
+
+cmake .. -DDEBUG_BUILD=OFF -DENABLE_UNSAFE=ON -DCOMPILE_SQLITE=ON -DCOMPILE_CURL=ON -DCOMPILE_SSL=ON -DAIRJUMPS=ON
+make
+

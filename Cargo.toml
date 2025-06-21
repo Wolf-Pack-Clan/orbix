@@ -1,0 +1,29 @@
+[package]
+name = "orbix"
+version = "0.1.0"
+edition = "2024"
+authors = ["Kazam (Discord: kazam0180)"]
+description = "CoD Server Creator"
+
+[dependencies]
+bzip2 = "0.6.0"
+indicatif = "0.17.11"
+md5 = "0.7.0"
+reqwest = { version = "0.12.20", features = ["blocking"] }
+sysinfo = "0.35.2"
+tar = "0.4.44"
+
+[profile.release]
+lto = true
+codegen-units = 1
+
+[package.metadata.deb]
+name = "orbix"
+maintainer = "Kazam (Discord: kazam0180)"
+priority = "optional"
+section = "utility"
+license-file = ["LICENSE", "0"]
+extended-description = """\
+This is utility that automates the creation of \
+Call of Duty ®️ (2003) servers ( currently v1.1 only). \
+Repo: https://github.com/Wolf-Pack-Clan/orbix"""

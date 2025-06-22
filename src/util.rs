@@ -93,48 +93,41 @@ pub(crate) fn extract_tar(fpath: &Path, outdir: &Path) -> io::Result<()>
 pub(crate) fn exe_perm(file: &str) -> io::Result<()>
 {
     Command::new("bash")
-    .arg("-c")
-    .arg(format!("chmod +x {}", file))
-    .spawn()?;
+        .arg("-c")
+        .arg(format!("chmod +x {}", file))
+        .spawn()?;
     Ok(())
 }
 
 pub(crate) fn install_deps() -> io::Result<()>
 {
     write_scripts().expect("Failed to extract helper scripts");
-
-    let mut id_like: String = String::new();
-
-    let pairs = distro_info()?;
-    for (key, value) in pairs {
-        if key == "ID_LIKE" {
-            id_like = value;
-        }
-    }
     let cmd: &str;
 
     let path_ = std::path::Path::new(&env::var("HOME").unwrap())
     .join(".local/share/orbix");
     let debcmd = path_.join("deps_debian");
-    let archcmd = path_.join("deps_debian");
+    let archcmd = path_.join("deps_arch");
 
-    match id_like.as_str() {
+    let id = distro_id()?;
+
+    match id.as_str() {
         "debian" => cmd = debcmd.to_str().unwrap(),
         "arch" => cmd = archcmd.to_str().unwrap(),
         _ => {
-            eprintln!("Unsupported distribution: {}", id_like);
+            eprintln!("Unsupported distribution: {}", id);
             return Err(io::Error::new(io::ErrorKind::Unsupported, "Unsupported OS")); // or handle the error as needed
         }
     }
 
     Command::new("sudo")
-    .arg("bash")
-    .arg(cmd)
-    .stdin(Stdio::inherit())
-    .stdout(Stdio::inherit())
-    .stderr(Stdio::inherit())
-    .status()
-    .expect("Failed to spawn sudo");
+        .arg("bash")
+        .arg(cmd)
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .status()
+        .expect("Failed to spawn sudo");
     Ok(())
 }
 
@@ -190,6 +183,29 @@ pub(crate) fn distro_info() -> io::Result<Vec<(String, String)>>
     .collect();
 
     Ok(pairs)
+}
+
+pub(crate) fn distro_id() -> io::Result<String>
+{
+    let mut id = String::new();
+    let mut id_like = String::new();
+    let pairs = distro_info()?;
+    for (key, value) in pairs {
+        if key == "ID" {
+            id = value.clone();
+        }
+        if key == "ID_LIKE" {
+            id_like = value;
+        }
+    }
+    if !id_like.is_empty() {
+        return Ok(id_like);
+    }
+    if !id.is_empty() {
+        return Ok(id);
+    }
+
+    Ok(String::from("unknown"))
 }
 
 pub(crate) fn create_cfg(targetdir: &Path) -> io::Result<()>
@@ -392,20 +408,20 @@ pub(crate) fn create_start_script(targetdir: &Path) -> io::Result<()> {
         "#!/bin/bash\n\
 LD_PRELOAD=\"{}\" \"{}\" +set fs_homepath \"{}\" +set fs_basepath \"{}\" \
 +set developer_script 1 +exec myserver.cfg +map_rotate\n",
-        preload.to_str().unwrap(),
-        exe.to_str().unwrap(),
-        targetdir.to_str().unwrap(),
-        targetdir.to_str().unwrap()
+preload.to_str().unwrap(),
+                         exe.to_str().unwrap(),
+                         targetdir.to_str().unwrap(),
+                         targetdir.to_str().unwrap()
     );
 
     // Write the file (creates or truncates)
     let mut file = OpenOptions::new()
-    .write(true)
-    .create(true)
-    .truncate(true)
-    // Set mode to 0o755 so it's executable
-    .mode(0o755)
-    .open(&script_path)?;
+        .write(true)
+        .create(true)
+        .truncate(true)
+        // Set mode to 0o755 so it's executable
+        .mode(0o755)
+        .open(&script_path)?;
 
     file.write_all(script.as_bytes())?;
     file.sync_all()?; // optional flush to disk

@@ -22,3 +22,6 @@ sudo apt install orbix
 </br>
 
 Arch Linux based distros are also supported but currently there are no packages. You can download binary files from the [release page](https://github.com/Wolf-Pack-Clan/orbix/releases).
+
+### Notes
+Orbix relies on timezone to set location in cfg. So, it may not work in chroot if timezone is not set.

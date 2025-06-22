@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Distro ID_LIKE: Debian\n"
+echo -e "Distro ID_LIKE: Debian\n"
 
 # using wildcard because the package is named libsqlite3-0 on ubuntu
 sudo apt install lib32z1 libc6-i386 g++-multilib cmake libsqlite3*:i386 libcurl4-openssl-dev:i386 libssl-dev:i386 git

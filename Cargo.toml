@@ -7,6 +7,7 @@ description = "CoD Server Creator"
 
 [dependencies]
 bzip2 = "0.6.0"
+iana-time-zone = "0.1.63"
 indicatif = "0.17.11"
 md5 = "0.7.0"
 reqwest = { version = "0.12.20", features = ["blocking"] }
